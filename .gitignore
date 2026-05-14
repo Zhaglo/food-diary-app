@@ -1,3 +1,236 @@
-venv/
+# =========================
+# Python bytecode / cache
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
 
+# C extensions
+*.so
+
+# =========================
+# Virtual environments
+# =========================
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# =========================
+# Environment variables / secrets
+# =========================
+.env
+.env.*
+!.env.example
+!.env.sample
+*.env
+
+# Local settings
+local_settings.py
+settings_local.py
+*.local.py
+
+# Secret/config files
+secrets.json
+credentials.json
+service-account*.json
+
+# =========================
+# Django
+# =========================
+
+# SQLite databases
 db.sqlite3
+db.sqlite3-journal
+*.sqlite3
+*.sqlite3-journal
+
+# Collected static files
+staticfiles/
+static_root/
+STATIC_ROOT/
+
+# User-uploaded media
+media/
+MEDIA_ROOT/
+
+# Django translations compiled files
+*.mo
+
+# Django cache/session files if file-based storage is used
+cache/
+sessions/
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+log/
+
+# =========================
+# Testing / coverage
+# =========================
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+*.py,cover
+hypothesis/
+
+# =========================
+# Type checkers / linters
+# =========================
+.mypy_cache/
+.pyre/
+.pytype/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+
+# =========================
+# Packaging / builds
+# =========================
+build/
+dist/
+develop-eggs/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# =========================
+# pip / dependency managers
+# =========================
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Usually keep lock files if you intentionally use them.
+# Uncomment only if your workflow requires ignoring them.
+# Pipfile.lock
+# poetry.lock
+# uv.lock
+
+# =========================
+# Celery / task queues
+# =========================
+celerybeat-schedule
+celerybeat.pid
+
+# =========================
+# Jupyter
+# =========================
+.ipynb_checkpoints/
+
+# =========================
+# Editors / IDEs
+# =========================
+
+# VS Code
+.vscode/
+
+# PyCharm / IntelliJ
+.idea/
+*.iml
+
+# Vim
+*.swp
+*.swo
+*~
+
+# Emacs
+\#*\#
+.\#*
+
+# =========================
+# OS files
+# =========================
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# =========================
+# Docker / local infra
+# =========================
+docker-compose.override.yml
+compose.override.yml
+
+# Volumes / local service data
+postgres_data/
+pgdata/
+redis_data/
+rabbitmq_data/
+
+# =========================
+# Frontend artifacts if Django serves a React/Vite/Webpack frontend
+# =========================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun-debug.log*
+
+.next/
+.nuxt/
+.svelte-kit/
+.vite/
+.parcel-cache/
+
+# Frontend build output
+frontend/dist/
+frontend/build/
+client/dist/
+client/build/
+
+# =========================
+# Temporary files
+# =========================
+tmp/
+temp/
+*.tmp
+*.temp
+*.bak
+*.orig
+
+# =========================
+# Backup / dump files
+# =========================
+*.sql
+*.dump
+*.bak.sql
+*.backup
+
+# =========================
+# Local certificates / keys
+# =========================
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# =========================
+# Misc
+# =========================
+*.pid
+*.seed
+*.pid.lock
