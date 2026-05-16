@@ -47,3 +47,10 @@ class MealEntrySerializer(serializers.ModelSerializer):
             'carbs',
             'created_at',
         )
+
+    def validate_weight_grams(self, value):
+        if value <= 0:
+            raise serializers.ValidationError(
+                'Вес должен быть больше нуля.'
+            )
+        return value

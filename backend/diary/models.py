@@ -22,7 +22,7 @@ class MealEntry(models.Model):
     product = models.ForeignKey(
         Product,
         on_delete=models.CASCADE,
-        related_name='meal_entries',
+        related_name='product',
     )
 
     meal_type = models.CharField(
