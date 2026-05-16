@@ -470,3 +470,144 @@ main {
   font: inherit;
   background: #fff;
 }
+
+.diary-page {
+  display: grid;
+  gap: 24px;
+}
+
+.diary-summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.summary-card {
+  display: grid;
+  gap: 10px;
+  padding: 22px;
+  border-radius: 20px;
+  background: #ffffff;
+  box-shadow: 0 18px 50px rgba(15, 23, 42, 0.06);
+}
+
+.summary-card span {
+  color: #64748b;
+  font-weight: 700;
+}
+
+.summary-card strong {
+  font-size: 28px;
+}
+
+.diary-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 420px) 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.diary-form {
+  display: grid;
+  gap: 16px;
+}
+
+.diary-form label {
+  display: grid;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.diary-form input,
+.diary-form select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  background: #fff;
+  font: inherit;
+}
+
+.entries-header h2 {
+  margin-bottom: 4px;
+}
+
+.entries-header p {
+  margin-top: 0;
+  color: #64748b;
+}
+
+.entries-list {
+  display: grid;
+  gap: 14px;
+}
+
+.entry-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 18px;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+}
+
+.entry-main {
+  display: grid;
+  gap: 10px;
+}
+
+.entry-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.entry-title-row h3 {
+  margin: 0;
+}
+
+.entry-title-row span {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: #eef2ff;
+  color: #3730a3;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.entry-meta {
+  margin: 0;
+  color: #64748b;
+}
+
+.entry-macros {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  color: #64748b;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+@media (max-width: 1050px) {
+  .diary-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .diary-summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .diary-summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .entry-item,
+  .entry-title-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
