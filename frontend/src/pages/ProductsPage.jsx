@@ -4,6 +4,7 @@ import {
   createProduct,
   deleteProduct,
   getProducts,
+  updateProduct,
 } from "../api/products";
 import { useAuth } from "../context/AuthContext";
 
@@ -46,6 +47,11 @@ export default function ProductsPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deletingProductId, setDeletingProductId] = useState(null);
+
+  const [editingProductId, setEditingProductId] = useState(null);
+  const [editingFormData, setEditingFormData] = useState(initialFormState);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [editingError, setEditingError] = useState("");
 
   const [pageError, setPageError] = useState("");
   const [formError, setFormError] = useState("");
@@ -128,8 +134,62 @@ export default function ProductsPage() {
     }
   }
 
-  function canDeleteProduct(product) {
+  function canManageProduct(product) {
     return user?.is_staff || product.created_by === user?.id;
+  }
+
+  function startEditing(product) {
+    setEditingProductId(product.id);
+    setEditingError("");
+
+    setEditingFormData({
+      name: product.name,
+      calories_per_100g: product.calories_per_100g,
+      proteins_per_100g: product.proteins_per_100g,
+      fats_per_100g: product.fats_per_100g,
+      carbs_per_100g: product.carbs_per_100g,
+    });
+  }
+
+  function cancelEditing() {
+    setEditingProductId(null);
+    setEditingFormData(initialFormState);
+    setEditingError("");
+  }
+
+  function handleEditingChange(event) {
+    const { name, value } = event.target;
+
+    setEditingFormData((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  }
+
+  async function handleUpdate(event) {
+    event.preventDefault();
+
+    setEditingError("");
+    setIsUpdating(true);
+
+    try {
+      const updatedProduct = await updateProduct(
+        editingProductId,
+        editingFormData
+      );
+
+      setProducts((prevProducts) =>
+        prevProducts.map((product) =>
+          product.id === updatedProduct.id ? updatedProduct : product
+        )
+      );
+
+      cancelEditing();
+    } catch (error) {
+      setEditingError(getFirstApiError(error));
+    } finally {
+      setIsUpdating(false);
+    }
   }
 
   return (
@@ -214,7 +274,11 @@ export default function ProductsPage() {
 
             {formError && <div className="form-error">{formError}</div>}
 
-            <button type="submit" disabled={isSubmitting}>
+            <button
+              type="submit"
+              className="primary-button"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Сохраняем..." : "Добавить продукт"}
             </button>
           </form>
@@ -246,28 +310,130 @@ export default function ProductsPage() {
             <div className="product-list">
               {filteredProducts.map((product) => (
                 <article key={product.id} className="product-item">
-                  <div className="product-item-main">
-                    <h3>{product.name}</h3>
+                  {editingProductId === product.id ? (
+                    <form className="edit-product-form" onSubmit={handleUpdate}>
+                      <label>
+                        Название
+                        <input
+                          type="text"
+                          name="name"
+                          value={editingFormData.name}
+                          onChange={handleEditingChange}
+                          required
+                        />
+                      </label>
 
-                    <div className="product-macros">
-                      <span>{product.calories_per_100g} ккал</span>
-                      <span>Б: {product.proteins_per_100g}</span>
-                      <span>Ж: {product.fats_per_100g}</span>
-                      <span>У: {product.carbs_per_100g}</span>
-                    </div>
-                  </div>
+                      <div className="form-grid-two">
+                        <label>
+                          Калории
+                          <input
+                            type="number"
+                            name="calories_per_100g"
+                            value={editingFormData.calories_per_100g}
+                            onChange={handleEditingChange}
+                            min="0"
+                            step="0.01"
+                            required
+                          />
+                        </label>
 
-                  {canDeleteProduct(product) && (
-                    <button
-                      type="button"
-                      className="danger-button"
-                      onClick={() => handleDelete(product.id)}
-                      disabled={deletingProductId === product.id}
-                    >
-                      {deletingProductId === product.id
-                        ? "Удаляем..."
-                        : "Удалить"}
-                    </button>
+                        <label>
+                          Белки
+                          <input
+                            type="number"
+                            name="proteins_per_100g"
+                            value={editingFormData.proteins_per_100g}
+                            onChange={handleEditingChange}
+                            min="0"
+                            step="0.01"
+                            required
+                          />
+                        </label>
+
+                        <label>
+                          Жиры
+                          <input
+                            type="number"
+                            name="fats_per_100g"
+                            value={editingFormData.fats_per_100g}
+                            onChange={handleEditingChange}
+                            min="0"
+                            step="0.01"
+                            required
+                          />
+                        </label>
+
+                        <label>
+                          Углеводы
+                          <input
+                            type="number"
+                            name="carbs_per_100g"
+                            value={editingFormData.carbs_per_100g}
+                            onChange={handleEditingChange}
+                            min="0"
+                            step="0.01"
+                            required
+                          />
+                        </label>
+                      </div>
+
+                      {editingError && <div className="form-error">{editingError}</div>}
+
+                      <div className="product-actions">
+                        <button
+                          type="submit"
+                          className="primary-button"
+                          disabled={isUpdating}
+                        >
+                          {isUpdating ? "Сохраняем..." : "Сохранить"}
+                        </button>
+
+                        <button
+                          type="button"
+                          className="secondary-button"
+                          onClick={cancelEditing}
+                          disabled={isUpdating}
+                        >
+                          Отмена
+                        </button>
+                      </div>
+                    </form>
+                  ) : (
+                    <>
+                      <div className="product-item-main">
+                        <h3>{product.name}</h3>
+
+                        <div className="product-macros">
+                          <span>{product.calories_per_100g} ккал</span>
+                          <span>Б: {product.proteins_per_100g}</span>
+                          <span>Ж: {product.fats_per_100g}</span>
+                          <span>У: {product.carbs_per_100g}</span>
+                        </div>
+                      </div>
+
+                      {canManageProduct(product) && (
+                        <div className="product-actions">
+                          <button
+                            type="button"
+                            className="secondary-button"
+                            onClick={() => startEditing(product)}
+                          >
+                            Редактировать
+                          </button>
+
+                          <button
+                            type="button"
+                            className="danger-button"
+                            onClick={() => handleDelete(product.id)}
+                            disabled={deletingProductId === product.id}
+                          >
+                            {deletingProductId === product.id
+                              ? "Удаляем..."
+                              : "Удалить"}
+                          </button>
+                        </div>
+                      )}
+                    </>
                   )}
                 </article>
               ))}

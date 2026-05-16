@@ -10,6 +10,11 @@ export async function createProduct(payload) {
   return response.data;
 }
 
+export async function updateProduct(productId, payload) {
+  const response = await api.patch(`/products/${productId}/`, payload);
+  return response.data;
+}
+
 export async function deleteProduct(productId) {
   await api.delete(`/products/${productId}/`);
 }
