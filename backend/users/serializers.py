@@ -57,3 +57,15 @@ class RegisterSerializer(serializers.ModelSerializer):
         DailyGoals.objects.create(user=user)
 
         return user
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            'id',
+            'username',
+            'email',
+            'is_staff',
+        )
+        read_only_fields = fields
