@@ -7,3 +7,11 @@ export async function getDailyAnalytics(date) {
 
   return response.data;
 }
+
+export async function getWeeklyAnalytics(date) {
+  const response = await api.get("/analytics/weekly/", {
+    params: { date },
+  });
+
+  return response.data;
+}
