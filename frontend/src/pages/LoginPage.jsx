@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
 
-import { loginUser } from "../api/auth";
+import { useAuth } from "../context/AuthContext";
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -23,13 +23,15 @@ export default function LoginPage() {
     }));
   }
 
+  const { login } = useAuth();
+
   async function handleSubmit(event) {
     event.preventDefault();
     setError("");
     setIsSubmitting(true);
 
     try {
-      await loginUser(formData);
+      await login(formData);
       navigate("/dashboard");
     } catch (err) {
       if (err.response?.status === 401) {
