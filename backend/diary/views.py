@@ -10,7 +10,14 @@ class MealEntryViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return MealEntry.objects.filter(user=self.request.user).select_related('product')
+        queryset = MealEntry.objects.filter(user=self.request.user).select_related('product')
+
+        date_param = self.request.query_params.get('date')
+
+        if date_param:
+            queryset = queryset.filter(date=date_param)
+
+        return queryset
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
