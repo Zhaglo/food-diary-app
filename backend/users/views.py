@@ -1,8 +1,12 @@
 from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from .models import User
-from .serializers import RegisterSerializer, UserSerializer
+from .models import User, DailyGoals
+from .serializers import (
+    RegisterSerializer,
+    UserSerializer,
+    DailyGoalsSerializer
+)
 
 
 class RegisterView(generics.CreateAPIView):
@@ -17,3 +21,12 @@ class CurrentUserView(generics.RetrieveAPIView):
 
     def get_object(self):
         return self.request.user
+
+
+class CurrentUserGoalView(generics.RetrieveUpdateAPIView):
+    serializer_class = DailyGoalsSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_object(self):
+        goal, _ = DailyGoals.objects.get_or_create(user=self.request.user)
+        return goal
