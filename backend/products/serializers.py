@@ -17,3 +17,40 @@ class ProductSerializer(serializers.ModelSerializer):
             'created_at',
         )
         read_only_fields = ('id', 'created_by', 'created_at')
+
+    def validate_name(self, value):
+        value = value.strip()
+
+        if not value:
+            raise serializers.ValidationError(
+                'Название продукта не может быть пустым.'
+            )
+        return value
+
+    def validate_calories_per_100g(self, value):
+        if value < 0:
+            raise serializers.ValidationError(
+                'Калорийность не может быть отрицательной.'
+            )
+        return value
+
+    def validate_proteins_per_100g(self, value):
+        if value < 0:
+            raise serializers.ValidationError(
+                'Количество белков не может быть отрицательным.'
+            )
+        return value
+
+    def validate_fats_per_100g(self, value):
+        if value < 0:
+            raise serializers.ValidationError(
+                'Количество жиров не может быть отрицательным.'
+            )
+        return value
+
+    def validate_carbs_per_100g(self, value):
+        if value < 0:
+            raise serializers.ValidationError(
+                'Количество углеводов не может быть отрицательным.'
+            )
+        return value
