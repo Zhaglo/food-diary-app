@@ -123,3 +123,97 @@ class ProductPermissionsTests(APITestCase):
         response = self.client.delete(self.detail_url)
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+
+class ProductValidationTests(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="validator_user",
+            password="ValidatorPass123!",
+        )
+
+        self.list_url = reverse("product-list")
+        self.client.force_authenticate(user=self.user)
+
+        self.valid_payload = {
+            "name": "Нормальный продукт",
+            "calories_per_100g": "250.00",
+            "proteins_per_100g": "10.00",
+            "fats_per_100g": "5.00",
+            "carbs_per_100g": "30.00",
+        }
+
+    def test_product_with_blank_name_is_rejected(self):
+        payload = {
+            **self.valid_payload,
+            "name": "   ",
+        }
+
+        response = self.client.post(
+            self.list_url,
+            payload,
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("name", response.data)
+
+    def test_product_with_negative_calories_is_rejected(self):
+        payload = {
+            **self.valid_payload,
+            "calories_per_100g": "-1.00",
+        }
+
+        response = self.client.post(
+            self.list_url,
+            payload,
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("calories_per_100g", response.data)
+
+    def test_product_with_negative_proteins_is_rejected(self):
+        payload = {
+            **self.valid_payload,
+            "proteins_per_100g": "-1.00",
+        }
+
+        response = self.client.post(
+            self.list_url,
+            payload,
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("proteins_per_100g", response.data)
+
+    def test_product_with_negative_fats_is_rejected(self):
+        payload = {
+            **self.valid_payload,
+            "fats_per_100g": "-1.00",
+        }
+
+        response = self.client.post(
+            self.list_url,
+            payload,
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("fats_per_100g", response.data)
+
+    def test_product_with_negative_carbs_is_rejected(self):
+        payload = {
+            **self.valid_payload,
+            "carbs_per_100g": "-1.00",
+        }
+
+        response = self.client.post(
+            self.list_url,
+            payload,
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("carbs_per_100g", response.data)
